@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Қаржылық сауаттылық ойыны</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 { color: #333; }
+    #game {
+      background: #fff;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #score { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Қаржылық сауаттылық ойыны</h1>
+  <div id="game">
+    <p id="question">Сұрақтар осында шығады</p>
+    <input type="number" id="answer" placeholder="Жауабыңыз">
+    <br>
+    <button onclick="checkAnswer()">Жауап беру</button>
+    <p id="feedback"></p>
+    <p>Ұпай: <span id="score">0</span></p>
+  </div>
+
+<script>
+  // Сұрақтар тізімі (пайыздық есептер)
+  const questions = [
+    {q:"10000 теңге депозитке 10% жылдық өсім. Бір жылдан кейін қанша болады?",a:11000},
+    {q:"Баға 2000 тг, 15% жеңілдік. Жаңа баға қанша?",a:1700},
+    {q:"Несие 50000 тг, 5% айлық пайыз қосылды. Қанша болды?",a:52500},
+    {q:"Сомасы 12000 тг, 20% өсім. Қанша болады?",a:14400}
+  ];
+  let current = 0;
+  let score = 0;
+
+  function showQuestion(){
+    document.getElementById('question').textContent = questions[current].q;
+    document.getElementById('answer').value = '';
+    document.getElementById('feedback').textContent = '';
+  }
+
+  function checkAnswer(){
+    const userAnswer = parseFloat(document.getElementById('answer').value);
+    if (isNaN(userAnswer)) {
+      document.getElementById('feedback').textContent = "Сан енгізіңіз!";
+      return;
+    }
+    const correct = questions[current].a;
+    if (Math.abs(userAnswer - correct) < 1) { // +/-1 теңге қателік
+      score++;
+      document.getElementById('feedback').textContent = "Дұрыс!";
+    } else {
+      document.getElementById('feedback').textContent = "Қате! Дұрыс жауап: "+correct;
+    }
+    document.getElementById('score').textContent = score;
+
+    current++;
+    if (current < questions.length) {
+      setTimeout(showQuestion,1000);
+    } else {
+      setTimeout(()=>{
+        document.getElementById('question').textContent = "Ойын аяқталды!";
+        document.getElementById('answer').style.display='none';
+      },1000);
+    }
+  }
+
+  showQuestion();
+</script>
+</body>
+</html>
